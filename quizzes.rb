@@ -14,7 +14,7 @@
     expected_answer = "grant me the s3r3nity to accept the things i cannot change the c0urage to change the things i can and the w1sd0m to know the difference"
 
     def sanitize_paragraph(paragraph)
-      # your code
+      puts "UH..."
     end
     
     puts "Challenge 1 completed: #{sanitize_paragraph(paragraph) == expected_answer}"
