@@ -13,8 +13,11 @@
 
     expected_answer = "grant me the s3r3nity to accept the things i cannot change the c0urage to change the things i can and the w1sd0m to know the difference"
 
-    def sanitize_paragraph(paragraph)
-      # your code
+	def sanitize_paragraph(paragraph)
+      # 1. Change all characters to downcase
+      # 2. Remove all special characters
+      # 3. Replace all whitespaces into one whitespace
+      return ((paragraph.downcase).gsub(/[^0-9a-z ]/, "")).gsub(/\s+/, " ")
     end
     
     puts "Challenge 1 completed: #{sanitize_paragraph(paragraph) == expected_answer}"
@@ -37,7 +40,20 @@
     ]
 
     def get_state(address)
-      # your code
+      # states
+      states = ["JOHOR","SARAWAK","TERENGGANU","SELANGOR"]
+
+      # 1. Change all characters to upcase
+      # 2. Only take last two lines from the address (usually state is located on the last two line of address)
+      address = (address.upcase).split(",")
+      address = address[-2] + address[-1]
+
+      # Loop the states with the last two lines address, if matched return the state
+      states.each_with_index do |state, index|
+        if address.include?(state) == true
+          return(state)
+        end
+      end
     end
 
     # passing validation
@@ -56,6 +72,22 @@
 
     def coord_to_wkt(coordinate_pair)
       # your code
+      answer = ''
+
+      coordinate_pair.each_with_index do |coordinate, index|
+        coordinate = coordinate.to_s
+        #convert array format to wkt using regex
+        coordinate = ((((((coordinate.gsub!'[[[', '').gsub!']]]', '').gsub!'],', '.').gsub!',', '').gsub!'.', ',').gsub!'[', '')
+        coordinate = '((' + coordinate + '))'
+          if index > 0 
+          answer += ', ' + coordinate
+          else
+          answer += coordinate
+          end
+      end
+   
+     answer = 'MULTIPOLYGON (' + answer + ')'
+     return answer
     end
 
     # passing validation
@@ -72,7 +104,45 @@
     Bonus points for the elegant recursive solution!'
 
     def is_palindrome?(word)
-      
+      #create a blank array
+      palindrome = []
+
+      #find the middle word
+      middle_word_location = word.length / 2
+
+      #is palindrome when the character only 1
+      if word.length == 1
+        return 'true'
+      #if the word is not even number set ignore middle word
+      elsif word.length % 2 != 0
+        ignore_middle_word = true
+      end
+
+       word.split("").each_with_index do |character, index|
+          #does not insert when meet the odd word middle chracter
+          if index == middle_word_location and ignore_middle_word == true
+            next
+          #keep insert character before middle character
+          elsif index < middle_word_location
+            palindrome.push(character)
+          else
+            #remove the last character from array when the chracter from after the middle character word is same with the last palindrome array word
+            if word.split("")[index] == palindrome.last
+              palindrome.pop
+            # break the loop if the characters not same since it is not palindrome (reduce time consumption)
+            else
+              break
+            end
+          end
+        end
+
+      # if the palindrome array is blank then is palindrome else not palindrome.
+      if palindrome.length == 0
+        return 'true'
+      else
+        return 'false'
+      end
+
     end
 
     # passing validation
