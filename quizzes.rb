@@ -13,8 +13,12 @@
 
     expected_answer = "grant me the s3r3nity to accept the things i cannot change the c0urage to change the things i can and the w1sd0m to know the difference"
 
+    'First, wrote the line to define a new var called sanitized which removed the non-alphanum. Then, second var to replace all long whitespaces with a single space to remove linebreaks'
+
+
     def sanitize_paragraph(paragraph)
-      # your code
+      sanitized = paragraph.downcase.gsub(/[^a-z0-9 ]/, '')
+      sanitized_nobreaks = sanitized.gsub(/\s+/, ' ')
     end
     
     puts "Challenge 1 completed: #{sanitize_paragraph(paragraph) == expected_answer}"
@@ -36,9 +40,15 @@
       "SARAWAK", "TERENGGANU", "JOHOR", "TERENGGANU", "SELANGOR", "SELANGOR"
     ]
 
-    def get_state(address)
-      # your code
-    end
+    'I could not figure out how to properly do this in a method . The best idea I could come up with was    splitting the original array into separate ones, then performing a scan to pick out state names. But that would not work with the provided validation process.'
+
+    'Hence, I had to use a simpler way. If we wanted to include all states, we could type them all in the scan. One weakness I know this will face is when a street name contains the same word as a different state name.'
+  
+      
+      def get_state(address)
+        result = address.upcase.scan(/Sarawak|Terengganu|Johor|Selangor|Pahang|Kelantan|Pulau Pinang/i).uniq
+        result[0]
+      end
 
     # passing validation
     addresses.each_with_index do |address, index|
@@ -72,8 +82,12 @@
     Bonus points for the elegant recursive solution!'
 
     def is_palindrome?(word)
-      
-    end
+      if word.length <= 1 or (word[0] == word[-1] and is_palindrome?(word[1..-2]))
+       return true
+      else
+       return false
+      end
+     end
 
     # passing validation
     puts "Challenge 4-1: is 'RADAR' a palindrome? Output: #{is_palindrome?('RADAR') || "nil"} | Correct answer: true"
