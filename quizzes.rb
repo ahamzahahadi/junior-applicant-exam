@@ -40,7 +40,7 @@
       "SARAWAK", "TERENGGANU", "JOHOR", "TERENGGANU", "SELANGOR", "SELANGOR"
     ]
 
-    'I could not figure out how to properly do this in a method . The best idea I could come up with was    splitting the original array into separate ones, then performing a scan to pick out state names. But that would not work with the provided validation process.'
+    'I could not figure out how to properly do this in a method . The best idea I could come up with was splitting the original array into separate ones, then performing a scan to pick out state names. But that would not work with the provided validation process.'
 
     'Hence, I had to use a simpler way. If we wanted to include all states, we could type them all in the scan. One weakness I know this will face is when a street name contains the same word as a different state name.'
   
@@ -64,8 +64,21 @@
     coordinate_pair = [[[[30,20], [45,40], [10,40], [30,20]]], [[[15,5], [40,10], [10,20], [5,10], [15,5]]]]
     expected_answer = "MULTIPOLYGON (((30 20, 45 40, 10 40, 30 20)), ((15 5, 40 10, 10 20, 5 10, 15 5)))"
 
+
+    'Thanks to the hint from Amir that expected_answer is simply a string, I thought I could do iterate through each nested element, combining them into a string. I did the same iteration twice to account for both levels of the nested array.'
     def coord_to_wkt(coordinate_pair)
-      # your code
+      new_coor = coordinate_pair.map{|x| x.map{
+      |y| y.map{
+        |a| a.join(" ")
+      }
+     }}
+
+     new_coor2 = new_coor.map{|x| x.map{
+      |y| y.join(", ")
+     }}
+
+     new_coor3 = new_coor2.join(")), ((")
+     wkt_coor = "MULTIPOLYGON (((" + new_coor3 + ")))"
     end
 
     # passing validation
