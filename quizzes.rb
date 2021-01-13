@@ -14,7 +14,12 @@
     expected_answer = "grant me the s3r3nity to accept the things i cannot change the c0urage to change the things i can and the w1sd0m to know the difference"
 
     def sanitize_paragraph(paragraph)
-      # your code
+      paragraph = paragraph.tr('’', '').tr('–', '').downcase
+      final = ""
+      paragraph.split("\n").each do |i|
+          final = final + " " + i.strip
+      end
+      return final.strip
     end
     
     puts "Challenge 1 completed: #{sanitize_paragraph(paragraph) == expected_answer}"
@@ -37,7 +42,13 @@
     ]
 
     def get_state(address)
-      # your code
+      state = address.split(",")[-1]
+      s = state.split(" ")[0].upcase
+      if s === "MALAYSIA"
+          state = address.split(",")[-2]
+          s = state.split(" ")[0].upcase
+      end
+      return s 
     end
 
     # passing validation
@@ -55,7 +66,15 @@
     expected_answer = "MULTIPOLYGON (((30 20, 45 40, 10 40, 30 20)), ((15 5, 40 10, 10 20, 5 10, 15 5)))"
 
     def coord_to_wkt(coordinate_pair)
-      # your code
+      answer = "MULTIPOLYGON ("
+      coordinate_pair.each do |i|
+          poly = ""
+          i[0].each do |j|
+              poly = poly + j[0].to_s + " " + j[1].to_s + ", "
+          end
+          answer= answer + "((" + poly[0..-3] + ")), "
+      end
+      return answer[0..-3] + ")"
     end
 
     # passing validation
@@ -72,7 +91,15 @@
     Bonus points for the elegant recursive solution!'
 
     def is_palindrome?(word)
-      
+      if (word.length == 1) || (word.length == 0) then 
+        return true
+      else
+        if word[0]==word[-1] then
+            is_palindrome?(word[1..-2])
+        else 
+            return false
+        end
+      end
     end
 
     # passing validation
