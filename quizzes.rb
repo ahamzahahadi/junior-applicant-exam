@@ -14,9 +14,10 @@
     expected_answer = "grant me the s3r3nity to accept the things i cannot change the c0urage to change the things i can and the w1sd0m to know the difference"
 
     def sanitize_paragraph(paragraph)
-      # your code
+      paragraph.gsub!(/[^0-9a-z ]/i, '').gsub!(/\s/,' ')
+      paragraph.squeeze!(' ')
+      paragraph.downcase!
     end
-    
     puts "Challenge 1 completed: #{sanitize_paragraph(paragraph) == expected_answer}"
 
 #####################################################################################
@@ -37,7 +38,16 @@
     ]
 
     def get_state(address)
-      # your code
+      states = [
+        "JOHOR", "KEDAH", "KELANTAN", "MELAKA", "NEGERI SEMBILAN", "PAHANG",
+        "PENANG", "PERAK", "PERLIS", "SABAH", "SARAWAK", "SELANGOR", "TERENGGANU",
+        "KUALA LUMPUR", "LABUAN", "PUTRAJAYA"
+      ]
+      address.upcase!
+      for state in states
+        if address.include?(state) then break end
+      end
+      state
     end
 
     # passing validation
@@ -55,7 +65,22 @@
     expected_answer = "MULTIPOLYGON (((30 20, 45 40, 10 40, 30 20)), ((15 5, 40 10, 10 20, 5 10, 15 5)))"
 
     def coord_to_wkt(coordinate_pair)
-      # your code
+      # my code will assume the coordinate pair is a multipolygon of the form
+      # given in the question (i.e. no interior linear rings and that the
+      # order of the coordinate pairs already follow the WKT format)
+      output = "MULTIPOLYGON ("
+      coordinate_pair.each_with_index do |inner_pairs, inner_pairs_index|
+        inner_pairs = inner_pairs[0]
+        inner_pairs_str = ""
+        inner_pairs.each_with_index do |pair, pair_index|
+          inner_pairs_str << "#{pair[0].to_s} #{pair[1].to_s}, "
+          if pair_index == inner_pairs.size - 1 then inner_pairs_str = inner_pairs_str[0...-2] end
+        end
+        output << "((#{inner_pairs_str})), "
+        if inner_pairs_index == coordinate_pair.size - 1 then output = output[0...-2] end
+      end
+      output << ")"
+      output
     end
 
     # passing validation
@@ -71,8 +96,16 @@
 
     Bonus points for the elegant recursive solution!'
 
+    # this is the most concise and obvious way I can think of
     def is_palindrome?(word)
-      
+      if word.reverse == word then true else false end
+    end
+
+    # here is a recursive one
+    def is_palindrome?(word)
+      if word.length <= 1 then return true end
+      if word[0] != word[-1] then return false end
+      is_palindrome?(word[1...-1])
     end
 
     # passing validation
