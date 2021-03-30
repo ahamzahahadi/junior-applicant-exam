@@ -14,7 +14,9 @@
     expected_answer = "grant me the s3r3nity to accept the things i cannot change the c0urage to change the things i can and the w1sd0m to know the difference"
 
     def sanitize_paragraph(paragraph)
-      # your code
+      sanitized = paragraph.gsub(/[^0-9a-z ]/i, '')# Removes non-alphanumeric characters
+      sanitized = sanitized.gsub(/[ ]{2,}/, ' ')# Removes leading spaces that is >2 spaces
+      return sanitized.downcase
     end
     
     puts "Challenge 1 completed: #{sanitize_paragraph(paragraph) == expected_answer}"
@@ -37,7 +39,14 @@
     ]
 
     def get_state(address)
-      # your code
+      address = address.split(",")
+      address = address[3, address.length]# Gets either only the [state] or [postcode, state, country]
+      if address.length == 1
+        return_add = address[0].lstrip().split(" ")[0].upcase
+        return return_add
+      else # In case of the order postcode, state, country
+        return address[1].lstrip().upcase #  state is index 1
+      end
     end
 
     # passing validation
@@ -55,7 +64,15 @@
     expected_answer = "MULTIPOLYGON (((30 20, 45 40, 10 40, 30 20)), ((15 5, 40 10, 10 20, 5 10, 15 5)))"
 
     def coord_to_wkt(coordinate_pair)
-      # your code
+      polygon = ""
+      for coordinates in coordinate_pair
+        shape = ""
+        for points in coordinates[0]
+          shape = shape + points[0].to_s + " " + points[1].to_s+ ", "
+        end
+        polygon = polygon +"((" + shape[0..-3] + ")), "
+      end
+      return "MULTIPOLYGON (" + polygon[0..-3] + ")"
     end
 
     # passing validation
@@ -72,7 +89,15 @@
     Bonus points for the elegant recursive solution!'
 
     def is_palindrome?(word)
-      
+      if word.length <=1
+        return true
+      else 
+        if word[0] == word[-1]
+          is_palindrome?(word[1..-2])
+        else
+          return false
+        end
+      end
     end
 
     # passing validation
